@@ -1,46 +1,56 @@
 const sqlite3 = require("sqlite3").verbose();
+const dbPath = "./db/database.sqlite3";
+const errorMsg = "Internal Server Error";
 
-exports.eventsall = async (req, res, next) => {
-  let db = new sqlite3.Database(
-    "./database.sqlite3",
-    sqlite3.OPEN_READWRITE,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("The database has opened successfully");
-      }
+const openDB = () => {
+  let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("The database opened successfully");
     }
-  );
-
-  console.log(db);
-  // db.serialize(() => {
-  //   db.each("SELECT * FROM events", (err, row) => {
-  //     console.log(row);
-  //     res.end(row);
-  //   });
-  // });
-
-  // db.close;
+  });
+  return db;
 };
 
-exports.create = async (req, res) => {
-  db.serialize(function () {
-    db.all(
-      `INSERT 
-        INTO events(groupid, eventname, startdatetime, enddatetime) 
-        values ( 
-            ${req.body.groupid}
-            , ${req.body.eventname}
-            , ${req.body.startdatetime}
-            , ${req.body.enddatetime}
-        )`,
+exports.getAll = async (req, res) => {
+  let db = openDB();
+  db.serialize(() => {
+    db.all("SELECT * FROM events", (err, row) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(errorMsg);
+      } else {
+        res.send(row);
+      }
+    });
+  });
+  db.close;
+};
+
+exports.insert = async (req, res) => {
+  console.log(req.body);
+  let db = openDB();
+  db.serialize(() => {
+    db.run(
+      `INSERT
+          INTO events(groupid, eventname, startdatetime, enddatetime)
+          values (
+              '${req.body.groupid}'
+              , '${req.body.eventname}'
+              , '${req.body.startdatetime}'
+              , '${req.body.enddatetime}'
+          )`,
       (err, row) => {
-        console.log(row.name + ":" + row.age);
+        if (err) {
+          console.log(err);
+          res.status(500).send(err);
+        } else {
+          res.send();
+        }
       }
     );
   });
-
   db.close();
 };
 

@@ -3,9 +3,9 @@ const router = express.Router();
 
 const eventsRoutes = require("./../controllers/eventsController.js");
 
-router.get("/all", eventsRoutes.eventsall);
+router.get("/all", eventsRoutes.getAll);
 
-//router.post("/create", eventsRoutes.insert);
+router.post("/create", eventsRoutes.insert);
 
 // router.post("/delete", eventsRoutes.delete);
 
