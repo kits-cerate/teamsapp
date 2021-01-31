@@ -1,6 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
 const dbPath = "./db/database.sqlite3";
-const errorMsg = "Internal Server Error";
 
 const openDB = () => {
   let db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
@@ -19,9 +18,9 @@ exports.getAll = async (req, res) => {
     db.all("SELECT * FROM events", (err, row) => {
       if (err) {
         console.log(err);
-        res.status(500).send(errorMsg);
+        res.json(err);
       } else {
-        res.send(row);
+        res.json(row);
       }
     });
   });
@@ -29,7 +28,6 @@ exports.getAll = async (req, res) => {
 };
 
 exports.insert = async (req, res) => {
-  console.log(req.body);
   let db = openDB();
   db.serialize(() => {
     db.run(
@@ -44,9 +42,9 @@ exports.insert = async (req, res) => {
       (err, row) => {
         if (err) {
           console.log(err);
-          res.status(500).send(err);
+          res.json(err);
         } else {
-          res.send();
+          res.json({ message: "The event was created correctly" });
         }
       }
     );
@@ -55,34 +53,46 @@ exports.insert = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
+  let db = openDB();
   db.serialize(function () {
     db.all(
-      `DELETE 
+      `DELETE
       FROM
           events 
       WHERE
-          id = ${req.body.id}`,
+          id = '${req.body.id}'`,
       (err, row) => {
-        console.log(row.name + ":" + row.age);
+        if (err) {
+          console.log(err);
+          res.json(err);
+        } else {
+          res.json({ message: "The event was deleted correctly" });
+        }
       }
     );
   });
-
   db.close();
 };
 
 exports.update = async (req, res) => {
+  let db = openDB();
   db.serialize(function () {
     db.all(
       `update events 
       set
-          groupid = ${req.body.groupid}
-          , eventname = ${req.body.eventname}
-          , startdatetime = ${req.body.startdatetime}
-          , enddatetime = ${req.body.enddatetime}
+          groupid = '${req.body.groupid}'
+          , eventname = '${req.body.eventname}'
+          , startdatetime = '${req.body.startdatetime}'
+          , enddatetime = '${req.body.enddatetime}'
       where
-          id = ${req.body.id}`,
+          id = '${req.body.id}'`,
       (err, row) => {
+        if (err) {
+          console.log(err);
+          res.json(err);
+        } else {
+          res.json({ message: "The event was updated correctly" });
+        }
         console.log(row.name + ":" + row.age);
       }
     );

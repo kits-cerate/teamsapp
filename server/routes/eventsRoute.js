@@ -7,8 +7,8 @@ router.get("/all", eventsRoutes.getAll);
 
 router.post("/create", eventsRoutes.insert);
 
-// router.post("/delete", eventsRoutes.delete);
+router.post("/delete", eventsRoutes.delete);
 
-// router.post("/update", eventsRoutes.update);
+router.post("/update", eventsRoutes.update);
 
 module.exports = router;
