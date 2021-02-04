@@ -1,8 +1,9 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import { makeStyles } from "@material-ui/core/styles";
-// import { TextField } from "@material-ui/core";
 import TextField from "./TextField";
 import SelectTextField from "./SelectTextField";
 import DatePickerDialog from "./DatePickerDialog";
@@ -32,6 +33,7 @@ const options = [
     value: "event1",
     label: "テストイベント１",
   },
+
   {
     value: "event2",
     label: "テストイベント２",
@@ -40,6 +42,19 @@ const options = [
 
 const Attendance = () => {
   const classes = useStyles();
+  const [groupid, setGroupid] = useState("");
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState(new Date());
+
+  const clickHandler = () => {
+    axios.post("http://localhost:3030/event/create", {
+      groupid: groupid,
+      name: name,
+      date: date,
+      time: time,
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -48,19 +63,24 @@ const Attendance = () => {
           <SelectTextField
             label="イベントグループ"
             options={options}
+            groupid={groupid}
+            setGroupid={setGroupid}
           ></SelectTextField>
         </Grid>
         <Grid item xs={12} sm={6} md={6} className={classes.itemGrid}>
-          <TextField label="イベント名"></TextField>
+          <TextField
+            label="イベント名"
+            onChange={(e) => setName(e.target.value)}
+          ></TextField>
         </Grid>
         <Grid item xs={12} sm={6} md={6} className={classes.itemGrid}>
-          <DatePickerDialog />
+          <DatePickerDialog date={date} setDate={setDate} />
         </Grid>
         <Grid item xs={12} sm={6} md={6} className={classes.itemGrid}>
-          <TimePickerDialog />
+          <TimePickerDialog time={time} setTime={setTime} />
         </Grid>
         <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
-          <Button text="イベント作成" />
+          <Button text="イベント作成" onClick={clickHandler} />
         </Grid>
       </Grid>
     </div>

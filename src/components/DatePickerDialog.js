@@ -24,13 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DatePickerDialog = (props) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
   const classes = useStyles();
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    console.log(selectedDate);
+    props.setDate(date);
   };
 
   return (
@@ -43,7 +40,7 @@ const DatePickerDialog = (props) => {
           label={"label" in props ? props.label : "日付"}
           format="yyyy/MM/dd"
           clearable
-          value={selectedDate}
+          value={props.date}
           onChange={(date) => handleDateChange(date)}
           KeyboardButtonProps={{
             "aria-label": "change date",

@@ -21,8 +21,8 @@ const TimePickerDialog = (props) => {
   const [selectedTime, setSelectedTime] = useState(new Date());
 
   const handleTimeChange = (date) => {
-    setSelectedTime(date);
-    console.log(selectedTime);
+    props.setTime(date);
+    console.log(date);
   };
 
   return (
@@ -35,7 +35,7 @@ const TimePickerDialog = (props) => {
           ampm={false}
           mask="__:__"
           label={"label" in props ? props.label : "時間"}
-          value={selectedTime}
+          value={props.time}
           onChange={(date) => handleTimeChange(date)}
           keyboardIcon={<AccessTimeIcon />}
           KeyboardButtonProps={{

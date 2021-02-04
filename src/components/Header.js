@@ -77,7 +77,7 @@ const Header = () => {
             style={{
               transformOrigin:
                 placement === "bottom" ? "center top" : "center bottom",
-              "z-index": "9999",
+              zIndex: "9999",
               background: "gray",
             }}
           >
