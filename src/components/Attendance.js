@@ -56,6 +56,10 @@ const Attendance = () => {
     });
   };
 
+  const fetchAll = () => {
+    axios.get();
+  };
+
   return (
     <div className={classes.root}>
       <Grid container xs={12} className={classes.containerGrid}>
@@ -82,6 +86,10 @@ const Attendance = () => {
         <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
           <Button text="イベント作成" onClick={clickHandler} />
         </Grid>
+        <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
+          <Button text="テストボタン" onClick={fetchAll} />
+        </Grid>
+        <ul></ul>
       </Grid>
     </div>
   );
