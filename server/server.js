@@ -5,7 +5,7 @@ const helmet = require("helmet");
 
 const eventsRouter = require("./routes/eventsRoute.js");
 
-const port = process.env.PORT || 3130;
+const port = process.env.PORT || 3010;
 
 const app = express();
 

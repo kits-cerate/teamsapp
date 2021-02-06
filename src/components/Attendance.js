@@ -2,13 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-
+import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "./TextField";
 import SelectTextField from "./SelectTextField";
 import DatePickerDialog from "./DatePickerDialog";
 import TimePickerDialog from "./TimePickerDialog";
-import Button from "./Button";
+import { AlarmTwoTone, Message } from "@material-ui/icons";
+//import { post } from "../../server/routes/eventsRoute";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     margin: theme.spacing(2),
+  },
+  button: {
+    margin: theme.spacing(2),
+    width: "30ch",
   },
 }));
 
@@ -47,8 +52,15 @@ const Attendance = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState(new Date());
 
-  const clickHandler = () => {
-    axios.post("http://localhost:3030/event/create", {
+  const clickCreateHandler = () => {
+    console.log({
+      groupid: groupid,
+      name: name,
+      date: date,
+      time: time,
+    });
+    console.log("pushed");
+    axios.post("http://localhost:3010/events/create", {
       groupid: groupid,
       name: name,
       date: date,
@@ -56,8 +68,20 @@ const Attendance = () => {
     });
   };
 
+  const clickDeleteHandler = () => {
+    axios.post("http://localhost:3010/events/delete", {
+      id: 3,
+    });
+  };
+
+  const [events, setEvents] = useState([]);
+
   const fetchAll = () => {
-    axios.get();
+    console.log("pushed");
+    axios.get("http://localhost:3010/events/all").then((res) => {
+      setEvents(res.data);
+      console.log(res.data);
+    });
   };
 
   return (
@@ -84,12 +108,40 @@ const Attendance = () => {
           <TimePickerDialog time={time} setTime={setTime} />
         </Grid>
         <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
-          <Button text="イベント作成" onClick={clickHandler} />
+          <Button
+            className={classes.standard}
+            variant="contained"
+            color="primary"
+            onClick={clickCreateHandler}
+          >
+            イベント作成
+          </Button>
         </Grid>
         <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
-          <Button text="テストボタン" onClick={fetchAll} />
+          <Button
+            className={classes.standard}
+            variant="contained"
+            color="primary"
+            onClick={clickDeleteHandler}
+          >
+            イベント削除
+          </Button>
         </Grid>
-        <ul></ul>
+        <Grid item xs={12} sm={12} md={12} className={classes.itemGrid}>
+          <Button
+            className={classes.standard}
+            variant="contained"
+            color="primary"
+            onClick={fetchAll}
+          >
+            テスト（全イベント取得）
+          </Button>
+        </Grid>
+        <ul>
+          {events.map((event) => (
+            <li key={event.id}>{event.eventname}</li>
+          ))}
+        </ul>
       </Grid>
     </div>
   );
