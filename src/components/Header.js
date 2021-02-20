@@ -76,8 +76,7 @@ const Header = () => {
             {...TransitionProps}
             style={{
               transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
-              zIndex: "9999",
+                placement === "bottom" ? "left top" : "left bottom",
               background: "gray",
             }}
           >
@@ -109,9 +108,6 @@ const Header = () => {
                   <Link to="/calendar">
                     <MenuItem onClick={handleClose}>カレンダー</MenuItem>
                   </Link>
-                  <MenuItem onClick={handleClose}>カレンダー</MenuItem>
-
-                  <MenuItem onClick={handleClose}>カレンダー</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

@@ -34,11 +34,17 @@ exports.insert = async (req, res) => {
       `INSERT
           INTO events(groupid, eventname, startdatetime, enddatetime)
           values (
-              '${req.body.groupid}'
-              , '${req.body.eventname}'
-              , '${req.body.startdatetime}'
-              , '${req.body.enddatetime}'
+              $groupid
+              , $eventname
+              , $startdatetime
+              , $enddatetime
           )`,
+      {
+        $groupid: req.body.groupid,
+        $eventname: req.body.eventname,
+        $startdatetime: req.body.startdatetime,
+        $enddatetime: req.body.enddatetime,
+      },
       (err, row) => {
         if (err) {
           console.log(err);
@@ -60,7 +66,7 @@ exports.delete = async (req, res) => {
       FROM
           events 
       WHERE
-          id = '${req.body.id}'`,
+          id IS NOT NULL`,
       (err, row) => {
         if (err) {
           console.log(err);
@@ -80,12 +86,19 @@ exports.update = async (req, res) => {
     db.all(
       `update events 
       set
-          groupid = '${req.body.groupid}'
-          , eventname = '${req.body.eventname}'
-          , startdatetime = '${req.body.startdatetime}'
-          , enddatetime = '${req.body.enddatetime}'
+          $groupid
+          , $eventname
+          , $startdatetime
+          , $enddatetime
       where
-          id = '${req.body.id}'`,
+          id = $id`,
+      {
+        $id: req.body.id,
+        $groupid: req.body.groupid,
+        $eventname: req.body.eventname,
+        $startdatetime: req.body.startdatetime,
+        $enddatetime: req.body.enddatetime,
+      },
       (err, row) => {
         if (err) {
           console.log(err);
@@ -93,7 +106,6 @@ exports.update = async (req, res) => {
         } else {
           res.json({ message: "The event was updated correctly" });
         }
-        console.log(row.name + ":" + row.age);
       }
     );
   });
